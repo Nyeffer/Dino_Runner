@@ -9,6 +9,7 @@ public class MoveRight : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 	private bool isActive = false;
 	public float movementCap = 10.0f;
 	private float moveCounter = 0.0f;
+	public GameObject Left;
 	private Vector3 pos;
 	public GameObject player;
 	
@@ -17,10 +18,14 @@ public class MoveRight : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 		pos = player.transform.position;
 		if(isActive) {
 			if(moveCounter < movementCap) {
-				pos.x -= Time.deltaTime;
+				pos.x -= Time.deltaTime * 5;
+				Left.GetComponent<MoveLeft>().AddToCap(Time.deltaTime);
 				moveCounter += Time.deltaTime;
 			}
 			player.transform.position = pos;
+		}
+		if(moveCounter <= 0) {
+			moveCounter = 0;
 		}
 	}
 
@@ -35,5 +40,13 @@ public class MoveRight : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 
 	public void SetisActive(bool activate) {
 		isActive = activate;		
+	}
+
+	public void AddToCap(float addCap) {
+		movementCap += addCap;
+	}
+
+	public float GetCap() {
+		return movementCap;
 	}
 }
